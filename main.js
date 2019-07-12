@@ -2,7 +2,7 @@ var formClass = {
   fields: {
     emailId: "email",
     passwordId: "password",
-    colorId: "colour",
+    colourId: "colour",
     animalsId: "animals",
     tigerId: "tiger",
     tigerTypeId: "tiger_type"
@@ -34,26 +34,16 @@ var formClass = {
     return this.checkFieldValidity(emailField);
   },
   checkPasswordFieldIsValid() {
-    var passwordField = document.getElementById(this.fields.emailId);
+    var passwordField = document.getElementById(this.fields.passwordId);
     return this.checkFieldValidity(passwordField);
   },
   checkColourFieldIsValid() {
-    var colourField = document.getElementById(this.fields.emailId);
+    var colourField = document.getElementById(this.fields.colourId);
     return this.checkFieldValidity(colourField);
   },
-  validateForm: function(event) {
-    event.preventDefault();
-
-    // Must be a valid email address
-    this.checkEmailFieldIsValid();
-
-    //Password must be at least 8 characters
-    checkFieldValidity(passwordField);
-
-    //Colour must be selected.
-    checkFieldValidity(colourField);
-    //At least two Animals must be chosen.
+  checkAnimalsFieldIsValid() {
     var totalChecked = 0;
+    var animalsFields = document.getElementById(this.fields.animalsId);
     animalsFields.forEach(function(animalField) {
       checkFieldValidity(animalField, function(field) {
         if (field.checked) {
@@ -62,10 +52,29 @@ var formClass = {
         return totalChecked < 2;
       });
     });
-    //If Tiger is one of the chosen Animals then Type of tiger is required to be a non - empty string.
+  },
+  checkTigerTypeFieldIsValid() {
+    var tigerField = document.getElementById(this.fields.tigerId);
+    var tigerTypeField = document.getElementById(this.fields.tigerTypeId);
     checkFieldValidity(tigerTypeField, function(field) {
       return tigerField.checked && !field.value;
     });
+  },
+  validateForm: function(event) {
+    event.preventDefault();
+
+    // Must be a valid email address
+    this.checkEmailFieldIsValid();
+
+    //Password must be at least 8 characters
+    this.checkPasswordFieldIsValid();
+
+    //Colour must be selected.
+    this.checkColourFieldIsValid();
+    //At least two Animals must be chosen.
+    this.checkAnimalsFieldIsValid();
+    //If Tiger is one of the chosen Animals then Type of tiger is required to be a non - empty string.
+    this.checkTigerTypeFieldIsValid();
 
     return false;
   }
