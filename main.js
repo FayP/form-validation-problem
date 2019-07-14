@@ -3,7 +3,7 @@ var formClass = {
     emailId: "email",
     passwordId: "password",
     colourId: "colour",
-    animalsId: "animals",
+    animalsId: "animal",
     tigerId: "tiger",
     tigerTypeId: "tiger_type"
   },
@@ -24,10 +24,10 @@ var formClass = {
       !field.value ||
       (!!callback && callback(field))
     ) {
-      return this.setFieldAsInvalid(field);
+      return formClass.setFieldAsInvalid(field);
     }
 
-    return this.removeFieldInvalidity(field);
+    return formClass.removeFieldInvalidity(field);
   },
   checkEmailFieldIsValid() {
     var emailField = document.getElementById(this.fields.emailId);
@@ -35,15 +35,20 @@ var formClass = {
   },
   checkPasswordFieldIsValid() {
     var passwordField = document.getElementById(this.fields.passwordId);
-    return this.checkFieldValidity(passwordField);
+
+    return (
+      this.checkFieldValidity(passwordField) && !passwordField.validity.tooShort
+    );
   },
   checkColourFieldIsValid() {
     var colourField = document.getElementById(this.fields.colourId);
     return this.checkFieldValidity(colourField);
   },
   checkAnimalsFieldIsValid() {
+    const { checkFieldValidity } = this;
     var totalChecked = 0;
-    var animalsFields = document.getElementById(this.fields.animalsId);
+    var animalsFields = document.getElementsByName(this.fields.animalsId);
+
     animalsFields.forEach(function(animalField) {
       checkFieldValidity(animalField, function(field) {
         if (field.checked) {
@@ -52,13 +57,21 @@ var formClass = {
         return totalChecked < 2;
       });
     });
+
+    return totalChecked >= 2;
   },
   checkTigerTypeFieldIsValid() {
     var tigerField = document.getElementById(this.fields.tigerId);
     var tigerTypeField = document.getElementById(this.fields.tigerTypeId);
-    checkFieldValidity(tigerTypeField, function(field) {
-      return tigerField.checked && !field.value;
-    });
+
+    if (
+      !tigerTypeField.checkValidity() ||
+      (tigerField.checked && !tigerTypeField.value)
+    ) {
+      return this.setFieldAsInvalid(tigerTypeField);
+    }
+
+    return this.removeFieldInvalidity(tigerTypeField);
   },
   validateForm: function(event) {
     event.preventDefault();
@@ -85,5 +98,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
 } else {
   document
     .getElementById("awesomeForm")
-    .addEventListener("submit", formClass.validateForm);
+    .addEventListener("submit", function(event) {
+      formClass.validateForm(event);
+    });
 }
