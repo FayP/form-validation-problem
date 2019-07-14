@@ -8,7 +8,7 @@ To me the tests provide the best documentation for the validation rules. This wa
 
 #### Accessibility
 
-I've added some aria tags that I believe are applicable to the DOM nodes in the `index.html` file.
+I've added some aria tags that I believe are applicable to the DOM nodes in the `index.html` file. Mostly the simple ones but others that would be really useful are `aria-invalid` which would change value as teh field becomes valid/invalid. However I ran out of time to implement this properley.
 
 #### Progressive enhancement
 
